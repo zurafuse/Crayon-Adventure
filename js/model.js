@@ -9,12 +9,16 @@ var requestAnimFrame =  window.requestAnimationFrame ||
                     };
 					
 //define canvas
-var newElement = document.createElement("canvas");
+/*var newElement = document.createElement("canvas");
 newElement.id = "canvas";
-document.getElementsByClassName("wrapper")[0].append(newElement);
+document.getElementsByClassName("wrapper")[0].append(newElement);*/
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth - 180;
+
+var keysUp = [];
+var keysDown = [];
+var dirLead = "down";
 
 var gridWidth = 29;
 var gridHeight = 15;
@@ -50,13 +54,51 @@ var player = {
 	sy: 0,
 	swidth: 50,
 	sheight: 50,
-	speed: sprtHtControl * 0.2,
+	speed: sprtHtControl * 0.15,
+	attack: false,
+	counter: 0,
 	update: function(){
+		//use counter to handle animations that should be slower than 60 fps
+		this.counter++;
+		if (this.counter > 3)
+		{
+			this.counter = 0;
+		}
+		//determine movement based on key pressed
 		if(keysDown[39] == true)
 		{
-			this.x++;
+			this.sy = 100;
+			this.x+= this.speed;
 		}
+		if(keysDown[37] == true)
+		{
+			this.sy = 150;
+			this.x-= this.speed;
+		}
+		if(keysDown[38] == true)
+		{
+			this.sy = 50;
+			this.y-= this.speed;
+		}	
+		if(keysDown[40] == true)
+		{
+			this.sy = 0;
+			this.y+= this.speed;
+		}	
+		if(keysDown[32] == true)
+		{
+			this.attack = true;
+		}
+		if (this.sx > 151)
+		{
+			this.sx = 0;
+		}
+		//draw onto the canvas.
 		ctx.drawImage(crayonImages.player, this.sx, this.sy, this.swidth, this.sheight, this.x, this.y, this.width, this.height);
+		//if the player is moving, animate him.
+		if ((keysDown[39] == true || keysDown[37] == true || keysDown[38] == true || keysDown[40] == true) && this.counter == 3){
+			this.sx += 50;
+		}
 	}
 };
 
