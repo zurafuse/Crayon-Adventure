@@ -107,6 +107,7 @@ var sword = {
 	sheight:  50,
 	img: crayonImages.sword,
 	angle: 2.2,
+	range: sprtHtControl * .75,
 	counter: 0,
 	extend: 0,
 	update: function(){
@@ -118,11 +119,12 @@ var sword = {
 			this.y = player.y + sprtHtControl * .89;
 			if (player.attack == true)
 			{
+				this.y = player.y + sprtHtControl * .39; 
 				this.angle = 1.9;
 				this.counter++;
 				this.x += sprtHtControl * (this.counter * .02);
 				this.y += this.extend;
-				if ((this.y + this.height) > player.y + player.height + (sprtHtControl * .75))
+				if ((this.y + this.height) > player.y + player.height + this.range)
 				{
 					this.y = player.y + sprtHtControl * .89;
 					this.extend = 0;
@@ -143,10 +145,16 @@ var sword = {
 			{
 				this.counter++;
 				this.x -= sprtHtControl * (this.counter * .02);
-				this.y -= sprtHtControl * (this.counter * .07);
-				if (this.counter > 4)
+				this.y -= this.extend;
+				if (this.y - this.range < player.y)
 				{
+					this.y = player.y - sprtHtControl * .89;
+					this.extend = 0;
 					this.counter = 0;
+				}
+				else
+				{
+					this.extend += sprtHtControl * .1;	
 				}
 			}
 		}
