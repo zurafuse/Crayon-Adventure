@@ -108,6 +108,7 @@ var sword = {
 	img: crayonImages.sword,
 	angle: 2.2,
 	counter: 0,
+	extend: 0,
 	update: function(){
 		//the positioning of the sword is dependent on the player's direction.
 		if (dir.lead == "down")
@@ -120,10 +121,16 @@ var sword = {
 				this.angle = 1.9;
 				this.counter++;
 				this.x += sprtHtControl * (this.counter * .02);
-				this.y += (sprtHtControl - 2) * (this.counter * .04);
-				if (this.counter > 4)
+				this.y += this.extend;
+				if ((this.y + this.height) > player.y + player.height + (sprtHtControl * .75))
 				{
+					this.y = player.y + sprtHtControl * .89;
+					this.extend = 0;
 					this.counter = 0;
+				}
+				else
+				{
+					this.extend += sprtHtControl * .1;	
 				}
 			}
 		}
